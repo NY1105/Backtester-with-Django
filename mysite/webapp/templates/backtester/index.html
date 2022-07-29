@@ -1,0 +1,250 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+
+    <style>
+        .center-container {
+            width: 60vw;
+            padding: 1rem;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: block;
+            width: 40vw;
+            margin: 0 auto;
+        }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script>
+    $(function () {
+        $("#backtest_date_from").datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            orientation: "bottom",
+            todayBtn: "linked",
+            todayHighlight: true,
+            minDate: new Date("01/01/2019"),
+            maxDate: new Date("01/06/2021")
+        }).on("changeDate", function (event) {
+            var minDate = new Date(event.date);
+            minDate.setDate(minDate.getDate() + 1);
+            $("#backtest_date_before").datepicker("setStartDate", minDate);
+        });
+    });
+
+    $(function () {
+        $("#backtest_date_before").datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            orientation: "bottom",
+            todayBtn: "linked",
+            todayHighlight: true,
+            minDate: new Date("01/06/2019"), 
+            maxDate: new Date("31/12/2021")
+        }).on("changeDate", function (event) {
+            var maxDate = new Date(event.date);
+            maxDate.getDate(maxDate.getDate() - 1);
+            $("#backtest_date_from").datepicker("setEndDate", maxDate);
+        });
+    });
+
+    $(function () {
+        $("#optimize_date_from").datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            orientation: "bottom",
+            todayBtn: "linked",
+            todayHighlight: true,
+            minDate: new Date("01/01/2019"),
+            maxDate: new Date("01/06/2021")
+        }).on("changeDate", function (event) {
+            var minDate = new Date(event.date);
+            minDate.setDate(minDate.getDate() + 1);
+            $("#optimize_date_before").datepicker("setStartDate", minDate);
+        });
+    });
+
+    $(function () {
+        $("#optimize_date_before").datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            orientation: "bottom",
+            todayBtn: "linked",
+            todayHighlight: true,
+            minDate: new Date("01/06/2019"),
+            maxDate: new Date("31/12/2021")
+        }).on("changeDate", function (event) {
+            var minDate = new Date(event.date);
+            minDate.setDate(minDate.getDate() + 1);
+            $("#optimize_date_from").datepicker("setStartDate", minDate);
+        });
+    });
+</script>
+
+<body>
+    <div class="center-container">
+        <form action="acs_result/" method="post">
+            {% csrf_token %}
+            <h1>Backtest ACS Strategy</h1>
+            <div class="row g-2">
+                <div class="col-md">
+                    <label for="floatingInput">Date From</label>
+                    <div class="form-floating mb-3">     
+                        <input type="text" name="backtest_startdate" value="01/01/2019" class="form-control" autocomplete="off"
+                            placeholder="Date from" required id="backtest_date_from">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <label for="floatingInput">Date To</label>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="backtest_enddate" value="30/06/2019" class="form-control" autocomplete="off"
+                            placeholder="Date from" required id="backtest_date_before">
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInput" name="fast_ma_period" placeholder="7" value="7">
+                        <label for="floatingInput">Fast MA Period</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInput" name="slow_ma_period" placeholder="20" value="20">
+                        <label for="floatingInput">Slow MA Period</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" name="distance" placeholder="8" value="8">
+                <label for="floatingInput">Trigger Distance</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" name="trailing_percentage" placeholder="1" value="1">
+                <label for="floatingInput">Trailing Percentage</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+      
+        </form>
+
+        <br>
+        <form action="ccy_result/" method="post">
+            {% csrf_token %}
+            <h1>Backtest CCY Strategy</h1>
+            <div class="row g-2">
+                <div class="col-md">
+                    <label for="floatingInput">Date From</label>
+                    <div class="form-floating mb-3">     
+                        <input type="text" name="backtest_startdate" value="01/01/2019" class="form-control" autocomplete="off"
+                            placeholder="Date from" required id="backtest_date_from">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <label for="floatingInput">Date To</label>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="backtest_enddate" value="30/06/2019" class="form-control" autocomplete="off"
+                            placeholder="Date from" required id="backtest_date_before">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" name="distance" placeholder="8" value="8">
+                <label for="floatingInput">Trigger Distance</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" name="trailing_percentage" placeholder="1" value="1">
+                <label for="floatingInput">Trailing Percentage</label>
+            </div>
+            <button type="submit" class="btn btn-primary" name="ccy_submit">Submit</button>
+        
+        </form>
+        <br>
+
+        <form action="optimize/" method="post">
+            {% csrf_token %}
+            <h1>Optimize ACS Strategy</h1>
+            <div class="row g-2">
+                <div class="col-md">
+                    <label for="floatingInput">Date From</label>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="optimize_startdate" value="01/01/2019" class="form-control" autocomplete="off"
+                            placeholder="Date from" required id="optimize_date_from">
+                    </div>
+                </div>
+                
+                <div class="col-md">
+                    <label for="floatingInput">Date To</label>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="optimize_enddate" value="30/06/2019" class="form-control" autocomplete="off"
+                            placeholder="Date from" required id="optimize_date_before">
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInput" name="min_ma_fast_period" placeholder="8" value="7">
+                        <label for="floatingInput">Minimum Fast MA Period</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInput" name="max_ma_fast_period" placeholder="8" value="9">
+                        <label for="floatingInput">Maximum Fast MA Period</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInput" name="min_ma_slow_period" placeholder="8" value="20">
+                        <label for="floatingInput">Minimum Slow MA Period</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInput" name="max_ma_slow_period" placeholder="8" value="22">
+                        <label for="floatingInput">Maximum Slow MA Period</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" name="min_distance" placeholder="8" value="8">
+                <label for="floatingInput">Min Trigger Distance</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" name="max_distance" placeholder="8" value="10">
+                <label for="floatingInput">Max Trigger Distance</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" name="ACSOpt_submit">Submit</button>
+           
+
+        </form>
+    </div>
+
+</body>

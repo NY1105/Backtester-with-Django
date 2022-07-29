@@ -1,0 +1,12 @@
+<div>
+    <h1>Result of {{strategy}} Backtest</h1>
+    <div>
+        {{html_body|safe}}
+    </div>
+    <div>
+        {% for line in report %}
+            {{line|safe}} <br />
+        {% endfor %}
+    </div>
+</div>
+
