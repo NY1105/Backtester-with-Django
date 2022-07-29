@@ -43,5 +43,4 @@ When two currencies are polarizing to a certain level, this backtester form the 
 
     This backtester is created and used for academic and research purposes, which could be further developed and be used for financial purposes.
     This backtester does not intend to make a recommendation or suggestion to anyone on making financial decision.
-     This backtester is created by Elvis Lam and Nicholas Yan, under supervision of Paul Lam. 
-     Forex Forest Algorithmic Trading (Grand Waye HK Limited) has the full ownership.
+    This backtester is created by Elvis Lam and Nicholas Yan, under supervision of Paul Lam. 
